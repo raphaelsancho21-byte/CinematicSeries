@@ -5,13 +5,18 @@ local RunService=game:GetService("RunService")
 local RS=game:GetService("ReplicatedStorage")
 local guiParent=Players.LocalPlayer:WaitForChild("PlayerGui")
 local remote=RS:WaitForChild("Take01Camera")
-local CONFIG={Duration=15,TypeSpeed=.025,ShowBubbles=true}
+local CONFIG={Duration=45,TypeSpeed=.025,ShowBubbles=true}
 local cues={
-    {time=3.2,duration=2.4,name="POLICIAL",rig="Policial",text="EI! VOCE AI! PARE AGORA!",color=Color3.fromRGB(90,170,255)},
-    {time=7,duration=2,name="BANDIDO",rig="Bandido",text="O QUE FOI?!",color=Color3.fromRGB(255,120,120)},
-    {time=9.3,duration=2.5,name="POLICIAL",rig="Policial",text="MAOS PRA CIMA! AGORA!",color=Color3.fromRGB(90,170,255)},
-    {time=12,duration=2.8,name="BANDIDO",rig="Bandido",text="CALMA! EU NAO FIZ NADA!",color=Color3.fromRGB(255,120,120)}
+    {time=3.0,duration=2.2,name="POLICIAL",rig="Policial",text="EI! PARA AGORA!",color=Color3.fromRGB(90,170,255)},
+    {time=7.9,duration=2.4,name="BANDIDO",rig="Bandido",text="VOCE NAO VAI ME PEGAR!",color=Color3.fromRGB(255,120,120)},
+    {time=11.7,duration=2.5,name="POLICIAL",rig="Policial",text="PARADO! POLICIA!",color=Color3.fromRGB(90,170,255)},
+    {time=19.5,duration=2.2,name="POLICIAL",rig="Policial",text="VOLTA AQUI!",color=Color3.fromRGB(90,170,255)},
+    {time=25.1,duration=2,name="BANDIDO",rig="Bandido",text="SAI DA MINHA FRENTE!",color=Color3.fromRGB(255,120,120)},
+    {time=30.2,duration=2,name="BANDIDO",rig="Bandido",text="AH! QUASE CAI!",color=Color3.fromRGB(255,120,120)},
+    {time=34,duration=2.2,name="POLICIAL",rig="Policial",text="ACABOU A FUGA!",color=Color3.fromRGB(90,170,255)},
+    {time=40,duration=3.2,name="BANDIDO",rig="Bandido",text="NAO CHEGA PERTO!",color=Color3.fromRGB(255,120,120)}
 }
+
 for _,name in ipairs({"CinematicDialogue","CinematicDialogueV2","CinematicDialogueV3"}) do
     local old=guiParent:FindFirstChild(name);if old then old:Destroy() end
 end
@@ -86,7 +91,7 @@ RunService.RenderStepped:Connect(function()
     if not startTime or finished then return end
     local t=workspace:GetServerTimeNow()-startTime
     if t<0 then return end
-    if t>=CONFIG.Duration then hide();finished=true;return end
+    if t>=(remote:GetAttribute("TakeDuration") or CONFIG.Duration) then hide();finished=true;return end
     local cue
     for _,c in ipairs(cues) do
         if t>=c.time and t<c.time+c.duration then cue=c;break end
