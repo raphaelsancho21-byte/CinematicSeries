@@ -14,6 +14,7 @@ local CONFIG={
     FaceDirection=Vector3.new(1,0,0),
     FloorClearance=0.07,
 }
+Workspace:SetAttribute("CinematicNPCsReady",false)
 local names={"Bandido","Policial"}
 local function locate(name)
     local root=Workspace:FindFirstChild(name)
@@ -122,4 +123,5 @@ for _,name in ipairs(names) do
         if rig then positionRig(rig,spawn) end
     end
 end
+Workspace:SetAttribute("CinematicNPCsReady",true)
 print("[NPC SPAWNER] Concluido.")
