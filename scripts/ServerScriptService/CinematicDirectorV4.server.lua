@@ -10,6 +10,13 @@ local CONFIG={
     Duration=15,Preparation=5,WalkDistance=12,
     PoliceStopDistance=4.5,WalkAnimation="Walk1",RunAnimation="Run1"
 }
+-- Aguarda posicionamento dos NPCs pelo spawner antes de memorizar a rota.
+if workspace:GetAttribute("CinematicNPCsReady")~=true then
+    local deadline=os.clock()+20
+    while workspace:GetAttribute("CinematicNPCsReady")~=true and os.clock()<deadline do
+        task.wait(.1)
+    end
+end
 local bandido=workspace:WaitForChild("Bandido")
 local policial=workspace:WaitForChild("Policial")
 local folder=SS:WaitForChild("RBX_ANIMSAVES")
