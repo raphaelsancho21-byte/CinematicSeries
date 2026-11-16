@@ -31,3 +31,14 @@ Estúdio de minisséries de ação no Roblox Studio. Projeto iniciado com o TAKE
 - `PositionActors=true` posiciona os dois modelos no asfalto. Os rigs precisam existir em `Workspace`, com os nomes exatos; caso nao existam, o Output mostra um aviso.
 - `ExtraStreetFill=true`, `LightBrightness=5.5` e `LightRange=42` clareiam as cenas; ajuste `Lighting.ExposureCompensation` para seu gosto.
 - **Aviso:** os scripts do GitHub nao substituem os scripts do Studio automaticamente; use Rojo ou copie os arquivos para os locais indicados.
+
+
+## Spawns dos NPCs (V1.2)
+1. Rode novamente `command-bar/GenerateNightCity.lua` em modo **Edit**, para criar `Bandido_Spawn` e `Policial_Spawn` dentro de `Workspace > CinematicSeries_Set > 06_Camera_And_Actor_Markers`.
+2. Crie um **Script** em `ServerScriptService` com o conteúdo de `scripts/ServerScriptService/CinematicNPCSpawner.server.lua`.
+3. Atualize `CinematicDirectorV4` com o conteúdo do arquivo homônimo no GitHub (ele espera o spawner terminar). Deixe apenas uma versão de cada Script habilitada.
+4. Clique em Play e confira o Output: `[NPC SPAWNER] Spawn: Bandido`, `[NPC SPAWNER] Spawn: Policial`.
+
+Se os rigs originais não existirem no Workspace, o spawner procura `ServerStorage > CinematicNPCs > Bandido/Policial`; se não houver modelos salvos, tenta criar rigs R6 padrão. Para preservar a aparência personalizada, mantenha seus modelos originais ou use templates nessa pasta.
+
+Os SpawnLocations possuem `Enabled=false` e são apenas marcadores de NPC, não alteram os pontos de nascimento de jogadores. Arraste os marcadores pelo Explorer para mudar os locais de entrada. 
