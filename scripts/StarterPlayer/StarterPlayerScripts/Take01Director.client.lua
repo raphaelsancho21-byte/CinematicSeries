@@ -19,16 +19,25 @@ local function getShot(t)
     local br,pr=root(bandido),root(policial)
     local bh,ph=target(bandido),target(policial)
     local center=(bh+ph)/2
+    -- Angulos alternados para a perseguicao. Camara segue o rosto, nao o solo.
     if t<4 then
-        return br.Position-br.CFrame.LookVector*12+br.CFrame.RightVector*7+Vector3.new(0,5,0),bh,55
-    elseif t<7 then
-        return pr.Position-pr.CFrame.LookVector*9+pr.CFrame.RightVector*6+Vector3.new(0,4,0),center,50
-    elseif t<10 then
-        return center+br.CFrame.RightVector*11+Vector3.new(0,4,0),center,45
-    elseif t<13 then
-        return ph+pr.CFrame.LookVector*5+pr.CFrame.RightVector*2+Vector3.new(0,.5,0),ph,36
+        return bh+Vector3.new(-12,4,12),bh,53
+    elseif t<8 then
+        return center+Vector3.new(-8,5,13),center,50
+    elseif t<12 then
+        return center+Vector3.new(2,3,10),center,43
+    elseif t<19 then
+        return bh+Vector3.new(10,3,12),bh,60
+    elseif t<25 then
+        return center+Vector3.new(-10,7,14),center,56
+    elseif t<30 then
+        return ph+Vector3.new(-7,3,9),bh:Lerp(ph,.55),48
+    elseif t<34 then
+        return bh+Vector3.new(4,2,8),bh,39
+    elseif t<39 then
+        return center+Vector3.new(-6,5,11),center,50
     end
-    return bh+br.CFrame.LookVector*4+br.CFrame.RightVector*1.5+Vector3.new(0,.3,0),bh,35
+    return center+Vector3.new(4,3,10),center,37
 end
 local player=Players.LocalPlayer
 local activeConnection,activeStart
@@ -44,7 +53,7 @@ local function play(startTime)
     activeConnection=RunService.RenderStepped:Connect(function(dt)
         local t=workspace:GetServerTimeNow()-startTime
         if t<0 then return end
-        if t>=15 then
+        if t>=(remote:GetAttribute("TakeDuration") or 45) then
             activeConnection:Disconnect();activeConnection=nil
             cam.CameraType=oldType;cam.FieldOfView=oldFOV
             local char=player.Character
