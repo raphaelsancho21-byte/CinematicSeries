@@ -204,6 +204,29 @@ local function marker(name,x,y,z,color)
     p:SetAttribute("CinematicMarker",true)
     return p
 end
+
+-- SPAWNS PERMANENTES PARA O TAKE
+-- Ajuste a posicao movendo os SpawnLocations pelo Explorer.
+local function actorSpawn(name, x, z, color)
+    local sp=Instance.new("SpawnLocation")
+    sp.Name=name
+    sp.Size=Vector3.new(5, .35, 5)
+    sp.CFrame=CFrame.new(at(x,-.30,z))
+    sp.Anchored=true
+    sp.CanCollide=false
+    sp.CanTouch=false
+    sp.Transparency=.55
+    sp.Material=Enum.Material.Neon
+    sp.Color=color
+    sp.Neutral=true
+    sp.Enabled=false -- somente marcadores, nao sao spawn de jogadores
+    sp:SetAttribute("CinematicNPCSpawn",true)
+    sp.Parent=markers
+    return sp
+end
+actorSpawn("Bandido_Spawn",-55,-3,Color3.fromRGB(235,71,71))
+actorSpawn("Policial_Spawn",-68,8,Color3.fromRGB(62,150,245))
+
 marker("Bandido_Start",-55,.03,-3,Color3.fromRGB(255,92,92))
 marker("Policial_Start",-68,.03,8,Color3.fromRGB(85,165,255))
 marker("Chase_Corner",alleyX,.03,-7,Color3.fromRGB(245,215,95))
@@ -269,8 +292,8 @@ local function moveActor(name,markerName)
     print("[CinematicSeries] Posicionado:",name)
 end
 if CONFIG.PositionActors then
-    moveActor("Bandido","Bandido_Start")
-    moveActor("Policial","Policial_Start")
+    moveActor("Bandido","Bandido_Spawn")
+    moveActor("Policial","Policial_Spawn")
 end
 
 print("[CinematicSeries] Mapa noturno gerado em Workspace.CinematicSeries_Set")
