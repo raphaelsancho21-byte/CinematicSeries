@@ -42,3 +42,16 @@ Estúdio de minisséries de ação no Roblox Studio. Projeto iniciado com o TAKE
 Se os rigs originais não existirem no Workspace, o spawner procura `ServerStorage > CinematicNPCs > Bandido/Policial`; se não houver modelos salvos, tenta criar rigs R6 padrão. Para preservar a aparência personalizada, mantenha seus modelos originais ou use templates nessa pasta.
 
 Os SpawnLocations possuem `Enabled=false` e são apenas marcadores de NPC, não alteram os pontos de nascimento de jogadores. Arraste os marcadores pelo Explorer para mudar os locais de entrada. 
+
+## TAKE 01 V5 — perseguição a pé (45 segundos)
+Sem novos scripts de ação: os **três scripts existentes** foram atualizados:
+- `scripts/ServerScriptService/CinematicDirectorV4.server.lua`: timeline de 45 segundos, caminhada, corrida, fuga, mudança brusca e poeira no quase tropeço; usa `Walk1` e `Run1` do `RBX_ANIMSAVES`.
+- `scripts/StarterPlayer/StarterPlayerScripts/Take01Director.client.lua`: oito enquadramentos seguindo NPCs, sem fixar a câmera no chão.
+- `scripts/StarterPlayer/StarterPlayerScripts/CinematicDialogue.client.lua`: novas falas até 43 segundos.
+- O `CinematicNPCSpawner.server.lua` e o mapa **não precisam ser alterados** nesta etapa.
+
+**Como instalar:** copie o conteúdo atualizado de cada um dos 3 arquivos para os scripts **já existentes** no Roblox Studio. Não crie cópias com outros nomes. Desative `R6AnimationController` e versões antigas para evitar disputa de animações.
+
+**Plano do take**: 0–4 caminhada; 4–8 chegada do policial; 8–12 provocação; 12–30 fuga; 30–33 quase tropeço com poeira; 33–39 retomada da perseguição; 39–45 confronto.
+
+**Limites:** esta cena é coreografada por `PivotTo`; não é navegação autônoma e não há armas físicas. Ajuste as posições no `bRoute`/`pRoute` dentro do diretor caso tenha carros ou obstáculos na rua. O roteiro foi escrito para o cenário do gerador padrão, mas ainda precisa de teste no Studio.
