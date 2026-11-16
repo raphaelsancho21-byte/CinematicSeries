@@ -1,6 +1,6 @@
 -- CinematicSeries / GenerateNightCity.lua
 -- COLE NA COMMAND BAR DO ROBLOX STUDIO (MODO EDICAO)
--- Recria somente Workspace.CinematicSeries_Set.
+-- Recria somente Workspace.CinematicSeries_Set e posiciona os atores existentes.
 local Lighting = game:GetService("Lighting")
 local Workspace = game:GetService("Workspace")
 local CONFIG = {
@@ -14,8 +14,10 @@ local CONFIG = {
     AddWetRoad = true,
     AddCars = true,
     AddNeon = true,
-    LightBrightness = 2.8,
-    LightRange = 28,
+    LightBrightness = 5.5,
+    LightRange = 42,
+    PositionActors = true,
+    ExtraStreetFill = true,
 }
 local rng = Random.new(CONFIG.Seed)
 local previous = Workspace:FindFirstChild("CinematicSeries_Set")
@@ -157,7 +159,7 @@ for x=-L/2+18,L/2-18,32 do
         local glow=part(lights,"Warm_Lamp",Vector3.new(2,.12,.65),at(x,14.1,z-side*2.2),Color3.fromRGB(255,205,125),Enum.Material.Neon)
         glow.CanCollide=false
         local spot=Instance.new("SpotLight");spot.Face=Enum.NormalId.Bottom
-        spot.Angle=105;spot.Range=CONFIG.LightRange;spot.Brightness=CONFIG.LightBrightness
+        spot.Angle=110;spot.Range=CONFIG.LightRange;spot.Brightness=CONFIG.LightBrightness
         spot.Color=Color3.fromRGB(255,201,145);spot.Shadows=true;spot.Parent=glow
     end
 end
@@ -211,25 +213,65 @@ marker("Camera_Alley",alleyX+11,5,-29,Color3.fromRGB(90,230,200))
 -- Luz global editavel: preserva scripts e personagens
 if CONFIG.ApplyGlobalLighting then
     Lighting.ClockTime=0.55
-    Lighting.Brightness=1.3
-    Lighting.ExposureCompensation=-.35
-    Lighting.Ambient=Color3.fromRGB(20,28,43)
-    Lighting.OutdoorAmbient=Color3.fromRGB(38,49,72)
+    Lighting.Brightness=2.6
+    Lighting.ExposureCompensation=.22
+    Lighting.Ambient=Color3.fromRGB(65,75,97)
+    Lighting.OutdoorAmbient=Color3.fromRGB(75,88,112)
     Lighting.EnvironmentDiffuseScale=.35
     Lighting.EnvironmentSpecularScale=.8
     Lighting.GlobalShadows=true
     local atmosphere=Lighting:FindFirstChild("CinematicSeries_Atmosphere")
     if not atmosphere then atmosphere=Instance.new("Atmosphere");atmosphere.Name="CinematicSeries_Atmosphere";atmosphere.Parent=Lighting end
-    atmosphere.Density=.36;atmosphere.Offset=.1
+    atmosphere.Density=.2;atmosphere.Offset=.1
     atmosphere.Color=Color3.fromRGB(137,157,190)
     atmosphere.Decay=Color3.fromRGB(36,46,70)
-    atmosphere.Glare=.08;atmosphere.Haze=1.6
+    atmosphere.Glare=.08;atmosphere.Haze=.85
     local cc=Lighting:FindFirstChild("CinematicSeries_ColorGrade")
     if not cc then cc=Instance.new("ColorCorrectionEffect");cc.Name="CinematicSeries_ColorGrade";cc.Parent=Lighting end
-    cc.Contrast=.17;cc.Saturation=-.16;cc.TintColor=Color3.fromRGB(192,212,255)
+    cc.Contrast=.08;cc.Saturation=-.08;cc.TintColor=Color3.fromRGB(218,229,255)
     local bloom=Lighting:FindFirstChild("CinematicSeries_Bloom")
     if not bloom then bloom=Instance.new("BloomEffect");bloom.Name="CinematicSeries_Bloom";bloom.Parent=Lighting end
-    bloom.Intensity=.35;bloom.Size=25;bloom.Threshold=1.25
+    bloom.Intensity=.28;bloom.Size=20;bloom.Threshold=1.5
 end
+
+-- Preenchimento cinematografico frio: o luar/reflectores iluminam o rosto dos atores.
+if CONFIG.ExtraStreetFill then
+    for x=-L/2+12,L/2-12,35 do
+        local fixture=light(lights,"Cool_Street_Fill_"..math.floor(x),at(x,10,0),Color3.fromRGB(168,203,255),1.65,33)
+        fixture.Transparency=1
+        fixture.CanCollide=false
+        local point=fixture:FindFirstChildOfClass("PointLight")
+        if point then point.Shadows=false end
+    end
+    for _,x in ipairs({-55,-28,28,70}) do
+        local fixture=light(lights,"Actor_Key_Light_"..x,at(x,10,-10),Color3.fromRGB(210,226,255),2.1,24)
+        fixture.Transparency=1
+        fixture.CanCollide=false
+        fixture:FindFirstChildOfClass("PointLight").Shadows=false
+    end
+end
+-- Bandido/Policial ficam fora da pasta do set e por isso nunca sao apagados.
+local function moveActor(name,markerName)
+    local rig=Workspace:FindFirstChild(name)
+    local mark=markers:FindFirstChild(markerName)
+    if not rig or not rig:IsA("Model") or not mark then
+        warn("[CinematicSeries] Nao posicionei",name,"(rig R6 nao encontrado no Workspace)")
+        return
+    end
+    -- Orienta na direcao +X para o primeiro percurso do take.
+    local base=CFrame.lookAt(mark.Position,mark.Position+Vector3.new(1,0,0))
+    rig:PivotTo(base)
+    local boxCF,boxSize=rig:GetBoundingBox()
+    local bottom=boxCF.Position.Y-boxSize.Y/2
+    local roadTop=at(0,-.75,0).Y+.45/2
+    local shiftY=roadTop-bottom+.08
+    rig:PivotTo(base+Vector3.new(0,shiftY,0))
+    print("[CinematicSeries] Posicionado:",name)
+end
+if CONFIG.PositionActors then
+    moveActor("Bandido","Bandido_Start")
+    moveActor("Policial","Policial_Start")
+end
+
 print("[CinematicSeries] Mapa noturno gerado em Workspace.CinematicSeries_Set")
 print("[CinematicSeries] Edite as pastas e marcadores. Para regenerar, altere CONFIG e execute novamente.")
