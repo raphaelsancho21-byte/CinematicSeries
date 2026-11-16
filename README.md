@@ -15,7 +15,7 @@ Estúdio de minisséries de ação no Roblox Studio. Projeto iniciado com o TAKE
 ## Primeiro passo: criar cenário
 1. Abra `command-bar/GenerateNightCity.lua`, copie todo o conteúdo e cole em **View > Command Bar** no modo edição.
 2. O mapa surge em `Workspace > CinematicSeries_Set`; cada peça é editável diretamente no Explorer.
-3. Configure `CONFIG` no topo do gerador e execute novamente para regenerar. O script recria **somente** `CinematicSeries_Set`, preservando os seus rigs.
+3. Configure `CONFIG` no topo do gerador e execute novamente para regenerar. A versao atual move automaticamente os rigs existentes `Bandido` e `Policial` para os marcadores e adiciona refletores de preenchimento. O script recria **somente** `CinematicSeries_Set`, preservando os seus rigs.
 4. Coloque os rigs R6 `Bandido` e `Policial` no Workspace e mantenha as animações em `ServerStorage > RBX_ANIMSAVES`.
 5. O sistema já existente usa `Take01Camera` (RemoteEvent) e `TakeStartTime` (Attribute). Os scripts versionados de take estão em `scripts/`.
 
@@ -25,3 +25,9 @@ Estúdio de minisséries de ação no Roblox Studio. Projeto iniciado com o TAKE
 - Toda peça gerada possui nome útil, e está agrupada em pastas: Streets, Buildings, Props, StreetLights, Details e Markers.
 - Scripts `.server.lua` / `.client.lua` são arquivos-fonte, não scripts executados pelo GitHub. Para sincronização automática no futuro, poderemos adicionar Rojo.
 - As animações de usuários terceiros permanecem no seu Studio; não são copiadas/publicadas neste repositório.
+
+## Correcao de iluminacao / atores
+- Use a ultima versao de `command-bar/GenerateNightCity.lua` no modo **Edit**. O script nao altera `Bandido` ou `Policial` alem de posiciona-los; o sistema de take continua separado.
+- `PositionActors=true` posiciona os dois modelos no asfalto. Os rigs precisam existir em `Workspace`, com os nomes exatos; caso nao existam, o Output mostra um aviso.
+- `ExtraStreetFill=true`, `LightBrightness=5.5` e `LightRange=42` clareiam as cenas; ajuste `Lighting.ExposureCompensation` para seu gosto.
+- **Aviso:** os scripts do GitHub nao substituem os scripts do Studio automaticamente; use Rojo ou copie os arquivos para os locais indicados.
